@@ -1,0 +1,63 @@
+{
+  "name": "bulk-operations-mdms",
+  "version": "0.0.2",
+  "description": "Bulk create update search delete",
+  "main": "dist",
+  "scripts": {
+    "dev": "nodemon --exec babel-node src",
+    "build": "babel src --out-dir dist --copy-files",
+    "start": "node dist",
+    "prestart": "npm run -s build",
+    "test": "eslint src"
+  },
+  "eslintConfig": {
+    "extends": "eslint:recommended",
+    "parserOptions": {
+      "ecmaVersion": 7,
+      "sourceType": "module"
+    },
+    "env": {
+      "node": true
+    },
+    "rules": {
+      "no-console": 0,
+      "no-unused-vars": 1
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/developit/express-es6-rest-api.git"
+  },
+  "author": "Jason Miller <jason@developit.ca>",
+  "license": "MIT",
+  "dependencies": {
+    "ajv": "^6.10.2",
+    "babel-cli": "^6.9.0",
+    "babel-preset-env": "^1.7.0",
+    "body-parser": "^1.13.3",
+    "compression": "^1.5.2",
+    "cors": "^2.7.1",
+    "dotenv": "^8.2.0",
+    "eslint": "^3.1.1",
+    "express": "^4.13.3",
+    "express-async-handler": "^1.1.4",
+    "kafka-node": "^5.0.0",
+    "morgan": "^1.8.0",
+    "nodemon": "^2.0.4",
+    "pg": "^7.12.1",
+    "swagger-ui-express": "^4.1.4",
+    "uuid": "^3.3.3",
+    "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  },
+  "bugs": {
+    "url": "https://github.com/developit/express-es6-rest-api/issues"
+  },
+  "engines": {
+    "node": "12.x",
+    "npm": "6.x"
+  },
+  "homepage": "https://github.com/developit/express-es6-rest-api#readme"
+}

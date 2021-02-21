@@ -1,0 +1,479 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "APIs for mdms module. This modules handles Below functionality.\n  1. Create modules and masters.\n  2. Search modules and masters.\n  3. Update modules and masters.\n",
+    "version": "1.0.0",
+    "title": "AWAK MDMS module.",
+    "contact": {
+      "name": "Murali M",
+      "email": "murali.m@goodworklabs.org"
+    }
+  },
+  "host": "https://awak-wk-mdms-micro-service-staging.awakpd.com",
+  "basePath": "/mdms-service",
+  "tags": [
+    {
+      "name": "MDMS",
+      "description": "APIs required for MDMS"
+    }
+  ],
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/v1/_search": {
+      "post": {
+        "tags": [
+          "MDMS"
+        ],
+        "summary": "Get the list of MDMS master and modules defined in the system.",
+        "description": "1. Search and get MDMS master and modules  based on defined search criteria.",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "MDMSRequest",
+            "description": "Details for the new MDMS master and modules + RequestInfo meta data.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/MDMSSearchRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "MDMS module and master data Retrived Successfully",
+            "schema": {
+              "$ref": "#/definitions/MDMSResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid input.",
+            "schema": {
+              "$ref": "#/definitions/ErrorRes"
+            }
+          }
+        }
+      }
+    },
+    "/v1/_create": {
+      "post": {
+        "tags": [
+          "MDMS"
+        ],
+        "summary": "Create new MDMS module and master data.",
+        "description": "To create new MDMS module and master data in the system. API supports bulk creation with max limit as defined in the MDMS module and master data Request. Please note that either whole batch succeeds or fails, there's no partial batch success. To create one MDMS module and master data, please pass array with one MDMS module and master data object.\n",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "MDMS module and master datasRequest",
+            "description": "Details for the new MDMS module and master data + RequestInfo meta data.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/MDMSRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "ReponseInfo with MDMS module and master data created successfully",
+            "schema": {
+              "$ref": "#/definitions/MDMSResponse"
+            }
+          },
+          "400": {
+            "description": "MDMS module and master data creation failed",
+            "schema": {
+              "$ref": "#/definitions/ErrorRes"
+            }
+          }
+        }
+      }
+    },
+    "/v1/_update": {
+      "post": {
+        "tags": [
+          "MDMS"
+        ],
+        "summary": "update existing MDMS module and master datas.",
+        "description": "To update existing MDMS module and master data in the system. API supports bulk updation with max limit as defined in the MDMS module and master data Request. Please note that either whole batch succeeds or fails, there's no partial batch success. To update one MDMS module and master data, please pass array with one MDMS module and master data object.\n",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "MDMS module and master datasRequest",
+            "description": "Details for the new MDMS module and master data + RequestInfo meta data.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/MDMSRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "ReponseInfo with MDMS module and master data updated sudcessfully",
+            "schema": {
+              "$ref": "#/definitions/MDMSResponse"
+            }
+          },
+          "400": {
+            "description": "MDMS module and master data updation failed",
+            "schema": {
+              "$ref": "#/definitions/ErrorRes"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "MDMSSearchRequest": {
+      "required": [
+        "MDMSSearchFilters",
+        "RequestInfo"
+      ],
+      "properties": {
+        "RequestInfo": {
+          "$ref": "#/definitions/RequestInfo"
+        },
+        "MDMSSearchFilters": {
+          "$ref": "#/definitions/MDMSSearchFilters"
+        }
+      },
+      "description": "Contract class to for search mdms"
+    },
+    "MDMSSearchFilters": {
+      "properties": {
+        "modulesDetails": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "moduleName": {
+                "type": "string"
+              },
+              "filter": {
+                "type": "string",
+                "description": "path for the module it might be clinic name admin or empty"
+              },
+              "mastersDetails": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "masterName": {
+                      "type": "string"
+                    },
+                    "path": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "MDMSResponse": {
+      "properties": {
+        "ResponseInfo": {
+          "$ref": "#/definitions/ResponseInfo"
+        },
+        "MDMSData": {
+          "type": "array",
+          "description": "Used for search result and create only",
+          "items": {
+            "$ref": "#/definitions/MDMSData"
+          }
+        }
+      },
+      "description": "Contract class to send response. Array of MDMS module and master data items are used in case of search results or response for create, whereas single MDMS master andmodules item is used for update"
+    },
+    "MDMSData": {
+      "properties": {
+        "uuid": {
+          "type": "string",
+          "readOnly": true
+        },
+        "moduleName": {
+          "type": "string"
+        },
+        "filter": {
+          "type": "string"
+        },
+        "masters": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "uuid": {
+                "type": "string",
+                "readOnly": true
+              },
+              "masterName": {
+                "type": "string"
+              },
+              "filter": {
+                "type": "string"
+              },
+              "data": {
+                "type": "object",
+                "properties": {}
+              },
+              "additionalInfo": {
+                "type": "object",
+                "description": "this json object where we can send extra information",
+                "properties": {}
+              },
+              "auditDetails": {
+                "$ref": "#/definitions/AuditDetails"
+              }
+            }
+          }
+        },
+        "additionalInfo": {
+          "type": "object",
+          "description": "this json object where we can send extra information",
+          "properties": {}
+        },
+        "auditDetails": {
+          "$ref": "#/definitions/AuditDetails"
+        }
+      },
+      "description": "data return from mdms"
+    },
+    "MDMSRequest": {
+      "required": [
+        "RequestInfo"
+      ],
+      "properties": {
+        "RequestInfo": {
+          "$ref": "#/definitions/RequestInfo"
+        },
+        "MDMSData": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MDMSData"
+          }
+        }
+      },
+      "description": "Contract class to for search mdms"
+    },
+    "ResponseInfo": {
+      "type": "object",
+      "required": [
+        "apiId",
+        "status",
+        "ts",
+        "ver"
+      ],
+      "properties": {
+        "apiId": {
+          "type": "string",
+          "description": "unique API ID",
+          "maxLength": 128
+        },
+        "ver": {
+          "type": "string",
+          "description": "API version",
+          "maxLength": 32
+        },
+        "ts": {
+          "type": "integer",
+          "format": "int64",
+          "description": "response time in epoch"
+        },
+        "resMsgId": {
+          "type": "string",
+          "description": "unique response message id (UUID) - will usually be the correlation id from the server",
+          "maxLength": 256
+        },
+        "msgId": {
+          "type": "string",
+          "description": "message id of the request",
+          "maxLength": 256
+        },
+        "status": {
+          "type": "string",
+          "description": "status of request processing - to be enhanced in futuer to include INPROGRESS",
+          "enum": [
+            "SUCCESSFUL",
+            "FAILED"
+          ]
+        }
+      },
+      "description": "ResponseInfo should be used to carry metadata information about the response from the server. apiId, ver and msgId in ResponseInfo should always correspond to the same values in respective request's RequestInfo."
+    },
+    "Error": {
+      "type": "object",
+      "required": [
+        "code",
+        "message"
+      ],
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "Error Code will be module specific error label/code to identiffy the error. All modules should also publish the Error codes with their specific localized values in localization service to ensure clients can print locale specific error messages. Example for error code would be MDMS module and master data.NotFound to indicate MDMS module and master data Not Found by MDMS module and master data/Authentication service. All services must declare their possible Error Codes with brief description in the error response section of their API path."
+        },
+        "message": {
+          "type": "string",
+          "description": "English locale message of the error code. Clients should make a separate call to get the other locale description if configured with the service. Clients may choose to cache these locale specific messages to enhance performance with a reasonable TTL (May be defined by the localization service based on tenant + module combination)."
+        },
+        "description": {
+          "type": "string",
+          "description": "Optional long description of the error to help clients take remedial action. This will not be available as part of localization service."
+        },
+        "params": {
+          "type": "array",
+          "description": "Some error messages may carry replaceable fields (say $1, $2) to provide more context to the message. E.g. Format related errors may want to indicate the actual field for which the format is invalid. Client's should use the values in the param array to replace those fields.",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Error object will be returned as a part of reponse body in conjunction with ResponseInfo as part of ErrorResponse whenever the request processing status in the ResponseInfo is FAILED. HTTP return in this scenario will usually be HTTP 400."
+    },
+    "ErrorRes": {
+      "type": "object",
+      "required": [
+        "ResponseInfo"
+      ],
+      "properties": {
+        "ResponseInfo": {
+          "$ref": "#/definitions/ResponseInfo"
+        },
+        "Errors": {
+          "type": "array",
+          "description": "Error response array corresponding to Request Object array. In case of single object submission or _search related paths this may be an array of one error element",
+          "items": {
+            "$ref": "#/definitions/Error"
+          }
+        }
+      },
+      "description": "All APIs will return ErrorRes in case of failure which will carry ResponseInfo as metadata and Error object as actual representation of error. In case of bulk apis, some apis may chose to return the array of Error objects to indicate individual failure."
+    },
+    "RequestInfo": {
+      "type": "object",
+      "required": [
+        "action",
+        "apiId",
+        "msgId",
+        "ts",
+        "ver"
+      ],
+      "properties": {
+        "apiId": {
+          "type": "string",
+          "description": "unique API ID",
+          "maxLength": 128
+        },
+        "ver": {
+          "type": "string",
+          "description": "API version - for HTTP based request this will be same as used in path",
+          "maxLength": 32
+        },
+        "ts": {
+          "type": "integer",
+          "format": "int64",
+          "description": "time in epoch"
+        },
+        "action": {
+          "type": "string",
+          "description": "API action to be performed like _create, _update, _search (denoting POST, PUT, GET) or _oauth etc",
+          "maxLength": 32
+        },
+        "did": {
+          "type": "string",
+          "description": "Device ID from which the API is called",
+          "maxLength": 1024
+        },
+        "key": {
+          "type": "string",
+          "description": "API key (API key provided to the caller in case of server to server communication)",
+          "maxLength": 256
+        },
+        "msgId": {
+          "type": "string",
+          "description": "Unique request message id from the caller",
+          "maxLength": 256
+        },
+        "requesterId": {
+          "type": "string",
+          "description": "MDMS module and master dataId of the MDMS module and master data calling",
+          "maxLength": 256
+        },
+        "authToken": {
+          "type": "string",
+          "description": "//session/jwt/saml token/oauth token - the usual value that would go into HTTP bearer token"
+        },
+        "correlationId": {
+          "type": "string",
+          "readOnly": true
+        }
+      },
+      "description": "RequestInfo should be used to carry meta information about the requests to the server as described in the fields below. All AWAK APIs will use requestinfo as a part of the request body to carry this meta information. Some of this information will be returned back from the server as part of the ResponseInfo in the response body to ensure correlation."
+    },
+    "AuditDetails": {
+      "type": "object",
+      "properties": {
+        "createdBy": {
+          "type": "string",
+          "description": "MDMS module and master dataname (preferred) or MDMS module and master dataid of the MDMS module and master data that created the object"
+        },
+        "lastModifiedBy": {
+          "type": "string",
+          "description": "MDMS module and master dataname (preferred) or MDMS module and master dataid of the MDMS module and master data that last modified the object"
+        },
+        "createdTime": {
+          "type": "integer",
+          "format": "int64",
+          "description": "epoch of the time object is created"
+        },
+        "lastModifiedTime": {
+          "type": "integer",
+          "format": "int64",
+          "description": "epoch of the time object is last modified"
+        }
+      },
+      "description": "Collection of audit related fields used by most models"
+    }
+  },
+  "parameters": {
+    "pageSize": {
+      "name": "pageSize",
+      "in": "query",
+      "description": "Number of records returned.",
+      "required": false,
+      "type": "integer",
+      "default": 20,
+      "maximum": 100,
+      "exclusiveMaximum": false,
+      "minimum": 0,
+      "exclusiveMinimum": true,
+      "multipleOf": 10
+    },
+    "pageNumber": {
+      "name": "pageNumber",
+      "in": "query",
+      "description": "Page number",
+      "required": false,
+      "type": "integer",
+      "default": 1
+    },
+    "sortProperty": {
+      "name": "sort",
+      "in": "query",
+      "description": "MDMS module and master data results will be sorted by fireMDMS module and master dataNumber ascending by default if this parameter is not provided.",
+      "required": false,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "[-+](fireMDMS module and master dataNumber|fireMDMS module and master dataType|ownerName)"
+      },
+      "collectionFormat": "pipes",
+      "default": "[+fireMDMS module and master dataNumber]",
+      "maxItems": 3,
+      "minItems": 1,
+      "uniqueItems": true
+    }
+  }
+}
